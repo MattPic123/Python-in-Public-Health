@@ -1,5 +1,7 @@
 from datetime import date
-from cryptography.fernet import Fernet
+from anonymate.anonymizer import Anonymizer
+
+anonymizer = Anonymizer()
 
 
 
@@ -41,11 +43,10 @@ profiles = [
 
 
 
-# CREATE SYMMETRIC ENCRYPTION KEY
+# Create Encryption Key
 
 
-key = Fernet.generate_key()
-cipher = Fernet(key)
+anonymizer = Anonymizer()
 
 
 
@@ -65,17 +66,19 @@ def encrypt_profiles():
             f"Blood Type: {profile['blood_type']}"
         )
 
-        encrypted_data = cipher.encrypt(data.encode())
+        encrypted_data = anonymizer.encrypt_text(data)
 
         encrypted_profiles.append(encrypted_data)
 
     print("\nProfile data has been encrypted successfully.")
 
-    return encrypted_profiles
+    for encrypted_profile in encrypted_profiles:
+
+        return encrypted_profiles.append(encrypted_data)
 
 
 
-# QUERY PROFILE DATA
+# Query Profile Data
 
 
 def query_profiles():
@@ -153,3 +156,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+  
