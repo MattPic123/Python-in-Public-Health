@@ -1,49 +1,62 @@
+# U.S. Census API Data Retrieval
+# Name: Matt Picaroni
+# Purpose: Retrieve state-level population data from the 2020/
+# /U.S. Census API using a State FIPS code and variable.
+
 import requests
 
-Year = 2020
-Dataset = "dec/pl"
+# Set the Census API year and dataset
+year = 2020
+dataset = "dec/pl"
 
-URL = f"https://api.census.gov/data/{Year}/{Dataset}"
+# Build the Census API URL
+URL = f"https://api.census.gov/data/{year}/{dataset}"
 
-API_KEY = "e2bc9c4f1b45730bfa2cc897a2ebd1c0978723d0"
+# Census API key
+api_key = "e2bc9c4f1b45730bfa2cc897a2ebd1c0978723d0"
 
-
-# Asking the user for the geography
+# Ask the user for a State FIPS code
 state_fips = input(
     "Enter the State FIPS code(s) that you would like data for: "
 )
 
-# Asking the user for the variables
+# Ask the user for Census variable names
 variables = input(
     "Enter the variable names that you would like data for: "
 )
 
-# Building the Census API parameters
+# Build the API request parameters
 params = {
     "get": f"NAME,{variables}",
     "for": f"state:{state_fips}",
-    "key": API_KEY
+    "key": api_key
 }
 
-# Request the data
-response = requests.get(URL, params=params)
-response.raise_for_status()
+try:
+    # Send the request to the Census API
+    response = requests.get(URL, params=params, timeout=30)
 
+    # Check for an unsuccessful HTTP response
+    response.raise_for_status()
 
-print("\nURL:", response.url)
-print("Status Code:", response.status_code)
+    # Display the request information
+    print("\nURL:", response.url)
+    print("Status Code:", response.status_code)
 
-if response.status_code != 200:
-    print(f"Request failed with status code {response.status_code}")
-    print(response.text)
-    raise SystemExit(1)
+    # Convert the JSON response to a Python variable
+    data = response.json()
 
-# Convert JSON response into a Python variable
-data = response.json()
+    # Display the number of rows returned
+    print(f"\nFound {len(data) - 1} Rows of Data.\n")
 
+    # Print each row of Census data
+    for row in data:
+        print(row)
 
-print(f"\nFound {len(data) - 1} Rows of Data.\n")
+except requests.exceptions.Timeout:
+    print("\nThe Census API request timed out.")
+    print("Check your internet connection and try again.")
 
-for row in data:
-    print(row)
-
+except requests.exceptions.RequestException as error:
+    print("\nThe Census API request failed.")
+    print(error)
