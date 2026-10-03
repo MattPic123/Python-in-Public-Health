@@ -1,4 +1,8 @@
 # Patient Heart Rate Directory
+# Name: Matthew Picaroni
+# Purpose: Store patient heart rate samples and allow users to/
+#/retrieve and calculate heart rate statistics.
+
 
 heart_rate_samples = {
     "J. Alvarez": [72, 75, 78],
