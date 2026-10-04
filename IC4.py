@@ -1,21 +1,22 @@
 # BRFSS Eye Health Data Cleaning
 # Name: Matt Picaroni
-# Purpose: Clean the BRFSS eye health dataset, remove unnecessary
-# columns, create new variables, and save the cleaned dataset.
+# Purpose: Clean the BRFSS Eye Health Dataset, Removing/
+#/ Unnecessary columns, creating new variables, and saving the cleaned dataset
 
 import pandas as pd
 import numpy as np
 
-# Load the eye health dataset
+# Load the Eye Health Dataset
+
 df = pd.read_csv('eye_health.csv')
 
-# Display basic information about the original dataset
-print(df.shape,
-      df.dtypes,
-      df.isnull().sum(),
-      df.nunique(),
-      sep='\n')
+# Display basic information about the original data set
 
+print(df.shape,
+       df.dtypes,
+       df.isnull().sum(),
+       df.nunique(),
+       sep='\n')
 # Check for duplicate rows
 print("Duplicates:", df.duplicated().sum())
 
@@ -23,24 +24,24 @@ print("Duplicates:", df.duplicated().sum())
 df = df.dropna(axis=1, how='all')
 
 # Remove ID columns
-df = df.drop(columns=[c for c in df.columns if c.endswith('ID')])
+df = df.drop(columns={c for c in df.columns if c.endswith('ID')})
 
 # Remove rows where data_value is missing
-df = df.dropna(subset=["data_value"])
+df = df.dropna(subset={"data_value"})
 
 # Remove unnecessary columns
-df = df.drop(columns=[
+df = df.drop(columns={
     "geolocation",
     "data_value_footnote_symbol",
     "data_value_footnote",
-    "stateabbr",
+    "stateabbration",
     "nonweightedsample",
     "geographic_level",
     "numerator"
-], errors="ignore")
+}, errors='ignore')
 
 # Standardize column names
-df.columns = df.columns.str.lower().str.replace(" ", '_')
+df.columns = df.columns.str.lower().str.replace(' ', '_')
 
 # Calculate confidence interval width
 df["ci_width"] = (
@@ -51,16 +52,16 @@ df["ci_width"] = (
 df["prevalence_level"] = np.select(
     [
         df["data_value"] < 5,
-        df["data_value"] <= 7
+        df["data_value"] >= 7,
     ],
     [
         "Low",
-        "Medium"
+        "Medium",
     ],
-    default="High"
+    default = "High"
 )
 
-# Save the cleaned dataset
+# Save the dataset
 df.to_csv('eye_health.csv', index=False)
 
 # Verify the saved dataset
