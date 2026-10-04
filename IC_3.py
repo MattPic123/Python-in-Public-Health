@@ -1,3 +1,4 @@
+
 # U.S. Census API - State Population Data
 # Name: Matt Picaroni
 # Purpose: Retrieve the total population for every U.S. state/
@@ -10,18 +11,19 @@ year = 2020
 dataset = "dec/pl"
 
 # Build the Census API URL
-url = f"https://api.census.gov/data/{year}/{dataset}"
+url= f"https://api.census.gov/data/{year}/{dataset}"
 
 # Census API key
-api_key = "e2bc9c4f1b45730bfa2cc897a2ebd1c0978723d0"
+api_key = "e2bc9c4f1b45730bfa2cc987a2ebd1c0978723d0"
 
 # Set the API parameters
-# NAME = state name
-# P1_001N = total population
-# state:* = request data for every state
+# NAME = State Name
+# P1_001N = Total Population
+# state: = Request Data for Every State
+
 params = {
     "get": "NAME,P1_001N",
-    "for": "state:*",
+    "for": "state:",
     "key": api_key
 }
 
@@ -45,9 +47,9 @@ print(f"Got {len(data) - 1} rows back.")
 for row in data:
     print(row)
 
+    print(f"Got {len(row) - 1} rows back.")
 
-print(f"Got {len(data) - 1} rows back.")
+    for i in data:
+        print(i)
 
-
-for i in data:
-    print(i)
+        
