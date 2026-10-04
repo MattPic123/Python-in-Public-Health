@@ -1,18 +1,19 @@
-# Data Anonymization Lab - IC Assignment
+# Data Anonymization Lab
 # Name: Matt Picaroni
-# Purpose: Store sample patient profile information, allow users to
-#/query profile data, encrypt the profile data, and save the/
-#/encrypted information to a file.
+# Purpose: Storing sample patient profile information, allows/
+#\users to query profile data, encrypt the profile data and save/
+#\ the encrypted information to a file.
 
 from datetime import date
 from anonymate.anonymizer import Anonymizer
 
 # Create the Anonymizer object
+from anonymate.anonymizer import Anonymizer
+
+# Create the Anonymizer object
 anonymizer = Anonymizer()
 
-
-# Profile Data
-
+#Profile Data
 profiles = [
     {
         'name': 'Oscar Newman',
@@ -46,38 +47,30 @@ profiles = [
     }
 ]
 
-
 # Encrypt Profile Data
-
 def encrypt_profiles():
+        encrypted_profiles = []
 
-    encrypted_profiles = []
+        #encrypt each profile
+        for profile in profiles:
+            data = (
+                f"Name: {profile['name']},"
+                f"DoB: {profile['DoB']},"
+                f"Sex: {profile['sex']},"
+                f"Blood Type: {profile['blood_type']}"
+            )
+            encrypted_data = anonymizer.encrypt_text(data)
+            encrypted_profiles.append(encrypted_data)
 
-    # Encrypt each profile
-    for profile in profiles:
+        # Save the encrypted profiles to text file
+        with open('encrypted_profiles.txt', 'w') as file:
 
-        data = (
-            f"Name: {profile['name']}, "
-            f"DoB: {profile['DoB']}, "
-            f"Sex: {profile['sex']}, "
-            f"Blood Type: {profile['blood_type']}"
-        )
+            for encrypted_profile in encrypted_profiles:
+                file.write(str(encrypted_profile) + "\n")
+        print("\nProfile data has been encrypted successfully.")
+        print("Encrypted data has been saved to encrypted_profiles.txt")
 
-        encrypted_data = anonymizer.encrypt_text(data)
-
-        encrypted_profiles.append(encrypted_data)
-
-    # Save the encrypted profiles to a text file
-    with open("encrypted_profiles.txt", "w") as file:
-
-        for encrypted_profile in encrypted_profiles:
-            file.write(str(encrypted_profile) + "\n")
-
-    print("\nProfile data has been encrypted successfully.")
-    print("Encrypted data saved to encrypted_profiles.txt")
-
-    return encrypted_profiles
-
+        return encrypted_profiles
 
 # Query Profile Data
 
@@ -93,22 +86,17 @@ def query_profiles():
 
     # Display names
     if choice == "1":
-
         for profile in profiles:
             print(profile['name'])
-
     # Display dates of birth
     elif choice == "2":
 
         for profile in profiles:
             print(profile['DoB'])
-
     # Display sex
     elif choice == "3":
-
         for profile in profiles:
             print(profile['sex'])
-
     # Display blood types
     elif choice == "4":
 
@@ -118,44 +106,38 @@ def query_profiles():
     else:
         print("Invalid choice.")
 
-
-# Main Program
-
 def main():
-
     encrypted_profiles = None
 
     while True:
 
         print("\nProfile System")
         print("1. Query profile information")
-        print("2. Encrypt profile data")
+        print("2. Encrypt profile information")
         print("3. Exit")
 
-        choice = input("\nSelect an option: ")
+        choice = input("\nEnter your choice: ")
 
         # Query profile information
         if choice == "1":
 
             query_profiles()
 
-        # Encrypt and save profile information
+        #encrypt and save profile information
         elif choice == "2":
 
-            encrypted_profiles = encrypt_profiles()
-
-        # Exit the program
+            encrypt_profiles()
+        #Exit
         elif choice == "3":
-
-            print("Seeya!")
+            print("Exiting...")
             break
 
         else:
 
-            print("Invalid choice. Please try again.")
+            print("Invalid choice.")
 
 
-# Run the program
+# Run Program
 
 if __name__ == "__main__":
     main()
