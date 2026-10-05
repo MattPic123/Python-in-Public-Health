@@ -1,4 +1,6 @@
-"""Convert the source dataset to Parquet."""
+# Lab 5: Dataset Conversion
+# Name: Matt Picaroni
+# Purpose: Converting dataset to Parquet
 
 from pathlib import Path
 import csv
