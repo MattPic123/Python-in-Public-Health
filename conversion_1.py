@@ -1,3 +1,7 @@
+# Lab 5: Dataset Conversion
+# Name: Matt Picaroni
+# Purpose: Converting dataset to JSON
+
 from pathlib import Path
 import csv
 
