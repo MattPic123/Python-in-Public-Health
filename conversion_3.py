@@ -1,4 +1,6 @@
-"""Converting the CSV to a formatted Excel workbook."""
+# Lab 5: Dataset Conversion
+# Name: Matt Picaroni
+# Purpose: Converting dataset to xlsx
 
 from pathlib import Path
 import csv
