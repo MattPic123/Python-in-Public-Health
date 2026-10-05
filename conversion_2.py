@@ -1,28 +1,30 @@
 """Convert the source dataset to Parquet."""
 
 from pathlib import Path
+import csv
 
 import pandas as pd
 
-from dataset_utils import columns, source_file, load_records
+folder = Path(__file__).parent
+csv_path = folder / "Maternal Health Risk Data Set.csv"
+output_path = folder / "Maternal_Health_Risk_Data_Set.parquet"
 
+#Checking the original CSV header
+with csv_path.open("r", newline="", encoding="utf-8-sig") as file:
+    headers = next(csv.reader(file))
 
-def main():
-    records = load_records(source_file)
-    if len(columns) != len(set(columns)):
-        raise ValueError("Duplicate column names are not allowed.")
+if len(headers) != len(set(headers)):
+    raise ValueError("headers must be unique")
 
-    data = pd.DataFrame.from_records(records, columns=columns)
-    output_path = Path(__file__).with_name("maternal_health_risk.parquet")
-    try:
-        data.to_parquet(output_path, index=False, engine="pyarrow")
-    except ImportError as exc:
-        raise SystemExit(
-            "Parquet support is missing. Install dependencies with "
-            "'python -m pip install -r requirements.txt'."
-        ) from exc
-    print(f"Created {output_path.name}: {len(data)} records, {len(data.columns)} unique columns.")
+df = pd.read_csv(csv_path)
 
+# removing leftover index columns
+df = df.loc[:,df.columns.str.startswith("Unnamed")]
 
-if __name__ == "__main__":
-    main()
+if not df.columns.is_unique:
+    raise ValueError("column names must be unique")
+
+df.to_parquet(output_path, engine="pyarrow",
+index = False)
+
+print("Parquet created")
