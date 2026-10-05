@@ -1,23 +1,27 @@
-"""Convert the source dataset to JSON records."""
-
-import json
 from pathlib import Path
+import csv
 
-from dataset_utils import columns, source_file, load_records
+import pandas as pd
 
+folder = Path(__file__).parent
+csv_path = folder / "Maternal Health Risk Data Set.csv"
+output_path = folder / "maternal_health_risk.json"
 
-def main():
-    records = load_records(source_file)
-    if len(columns) != len(set(columns)):
-        raise ValueError("Duplicate column names are not allowed.")
+with csv_path.open("r", newline="",
+encoding="utf-8-sig") as file:
+    headers = next(csv.reader(file))
 
-    output_path = Path(__file__).with_name("maternal_health_risk.json")
-    output_path.write_text(
-        json.dumps(records, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-    print(f"Created {output_path.name}: {len(records)} records, {len(columns)} unique columns.")
+if len(headers) != len(set(headers)):
+    raise ValueError("Duplicate headers in csv file")
 
+df = pd.read_csv(csv_path)
+df = df.loc[:,
+df.columns.str.startswith("Unnamed")]
 
-if __name__ == "__main__":
-    main()
+if not df.columns.is_unique:
+    raise ValueError("Duplicate columns in csv file")
+
+df.to_json(output_path, orient="records",
+indent = 2)
+
+print(f"Saved {output_path.name}")
