@@ -1,6 +1,7 @@
-#------  ------
+#------ Scatterplot using linear regression ------
 #------ Name: Matt Picaroni------
-#------ Purpose:
+#------ Purpose: Creating a scatter plot using matplotlib and statsmodels/
+#\ representing linear regression and multicollinearity using blood pressure data
 
 #imports
 import matplotlib.pyplot as plt
