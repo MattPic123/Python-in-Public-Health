@@ -187,7 +187,7 @@ def ask_to_save(figure: plt.Figure, description: str) -> None:
             f"Would you like to save the {description}? (Y/N): "
         ).strip().lower()
 
-        if response in ["Y", "yes"]:
+        if response in ["y", "yes"]:
             while True:
                 file_name = input(
                     "Enter a custom png filename or path: "
@@ -204,7 +204,7 @@ def ask_to_save(figure: plt.Figure, description: str) -> None:
                     return
 
                 print("Enter a filename.")
-        elif response in ["N", "no"]:
+        elif response in ["n", "no"]:
             return
 
         else:
