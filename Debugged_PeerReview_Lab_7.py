@@ -1,8 +1,8 @@
 # Lab 7: Linear Regression
 # Original scripts: Madison Lowenstein
 # Revised by: Matt Picaroni
-# Purpose: Load a selected CSV, clean column names, prompt for X and Y,
-# calculate OLS, and optionally save scatterplots with custom filenames.
+# Purpose: Load a selected CSV, clean column names, prompt for data ranges and variables,
+# calculate OLS, and optionally save scatterplots with custom filenames, colors, and line widths.
 
 from pathlib import Path
 import re
@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
+from matplotlib.colors import is_color_like
 
 LAB_DIR = Path(__file__).resolve().parent
 FIGURES_DIR = LAB_DIR / "figures"
@@ -171,12 +172,13 @@ def ask_to_save(fig, description):
 
 
 # Create a scatterplot of the selected variables.
-def create_scatterplot(data, x_col, y_col):
+def create_scatterplot(data, x_col, y_col, formatting):
     fig, ax = plt.subplots(figsize=(8, 6))
 
     ax.scatter(
         data[x_col],
         data[y_col],
+        color=formatting["point_color"],
         alpha=0.6,
         edgecolor="k",
         linewidth=0.3,
@@ -184,11 +186,117 @@ def create_scatterplot(data, x_col, y_col):
 
     ax.set_xlabel(x_col)
     ax.set_ylabel(y_col)
-    ax.set_title(f"{y_col} vs {x_col} (n = {len(data)})")
-    ax.grid(alpha=0.3)
-    fig.tight_layout()
 
+    title= formatting["title"] or f"{y_col} vs {x_col}"
+    ax.set_title(f"{title} (n = {len(data)})")
+
+    if formatting["grid"]:
+        ax.grid(True, alpha=0.3)
+
+    else:
+        ax.grid(False)
+
+    fig.tight_layout()
     return fig, ax
+
+#Prompt for a custom number, with an optional default setting
+def prompt_number(message, default=None):
+    while True:
+        entered = input(message).strip()
+
+        if not entered:
+            return default
+
+        try:
+            value = float(entered)
+
+            if np.isfinite(value):
+                return value
+
+        except ValueError:
+            pass
+
+        print("Enter a valid number.")
+
+# Filters both variables using inclusive limits
+def select_data_ranges(data, x_col, y_col):
+    print("\nSelect data ranges. Press Enter to leave a limit unrestricted.")
+    print("Enter limits in the units stored in the CSV.")
+
+    while True:
+        filtered = data.copy()
+
+        for column in (x_col, y_col):
+            print(
+                f"\n{column}: observed range "
+                f"{data[column].min():.2f} to {data[column].max():.2f}"
+            )
+
+            while True:
+                lower = prompt_number(f"Minimum {column}: ")
+                upper =prompt_number(f"Maximum {column}: ")
+
+                if lower is None or upper is None or lower <= upper:
+                    break
+
+                print("Minimum cannot exceed maximum. Try again.")
+
+            if lower is not None:
+                filtered = filtered[filtered[column] >= lower]
+
+            if upper is not None:
+                filtered = filtered[filtered[column] <= upper]
+
+        # Require enough observation for regression with degrees of freedom
+        if len(filtered) < 3:
+            print("Fewer than three rows remain. Choose wider range. ")
+        elif filtered[x_col].nunique() < 2:
+            print("X must have at least 2 unique values.")
+        else:
+            print(f"\nUsing {len(filtered):,} rows within the selected range.")
+            return filtered
+
+# Validate a Matplotlib color.
+def prompt_color(message, default):
+    while True:
+        color = input(message).strip() or default
+
+        if is_color_like(color):
+            return color
+
+        print("Enter a valid color.")
+
+#Collecting formating choices for both plots.
+def prompt_plot_format():
+    print("\nPlot formatting: press Enter to choose the default.")
+
+    point_color = prompt_color("Point color [steelblue]: ", "steelblue")
+    line_color = prompt_color("Regression line color [crimson]: ", "crimson")
+
+    while True:
+        line_width = prompt_number("Regression line width [2]: ", default=2)
+
+        if line_width > 0:
+            break
+
+        print("Line width must be greater than zero.")
+    while True:
+        grid_choice = input("Show gridlines? [Y/N, default Y]: ").strip().lower()
+
+        if grid_choice in ("", "y", "yes", "n", "no"):
+            break
+
+        print("Enter Y or N.")
+
+    title = input("Custom plot title [automatic]: ").strip()
+
+    return {"point_color": point_color,
+            "line_width": line_width,
+            "title": title,
+            "grid": grid_choice in ("", "y", "yes"),
+            "line_color": line_color,
+        }
+
 
 
 # Run the dataset selection, plotting, and regression workflow.
@@ -210,8 +318,11 @@ def main():
 
         break
 
+    data = select_data_ranges(data, x_col, y_col)
+    formatting = prompt_plot_format()
+
     # Display and optionally save the scatterplot without an OLS line.
-    fig, ax = create_scatterplot(data, x_col, y_col)
+    fig, ax = create_scatterplot(data, x_col, y_col, formatting)
 
     print("\nClose the scatterplot preview to continue to the save prompt.")
     plt.show()
@@ -237,7 +348,7 @@ def main():
     )
 
     # Recreate the scatterplot and add the fitted OLS line.
-    fig, ax = create_scatterplot(data, x_col, y_col)
+    fig, ax = create_scatterplot(data, x_col, y_col, formatting)
 
     x_line = np.linspace(
         data[x_col].min(),
@@ -249,14 +360,14 @@ def main():
     ax.plot(
         x_line,
         y_line,
-        color="crimson",
-        linewidth=2,
+        color=formatting["line_color"],
+        linewidth=formatting["line_width"],
         label=f"OLS line (R² = {model.rsquared:.3f})",
     )
 
-    ax.set_title(
-        f"{y_col} vs {x_col} with OLS line (n = {len(data)})"
-    )
+    title = formatting["title"] or f"{y_col} vs {x_col}"
+    ax.set_title(f"{title} with OLS line (n= {len(data)})")
+
     ax.legend()
     fig.tight_layout()
 
