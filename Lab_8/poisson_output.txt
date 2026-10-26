@@ -1,0 +1,76 @@
+Dataset: places_2025 (1).csv
+Model: poisson
+Predictors: binge_crude_prev, checkup_crude_prev, csmoking_crude_prev, depression_crude_prev, obesity_crude_prev, sleep_crude_prev, selfcare_crude_prev, indeplive_crude_prev, loneliness_crude_prev, foodinsecu_crude_prev, housinsecu_crude_prev
+Response: mhlth_crude_prev
+Original rows: 3143
+Rows used: 2299
+Rows removed: 844
+
+ASSIGNMENT DEMONSTRATION: The response is noninteger. The Poisson count assumption is not satisfied. Values were not rounded or converted to counts.
+
+                 Generalized Linear Model Regression Results                  
+==============================================================================
+Dep. Variable:       mhlth_crude_prev   No. Observations:                 2299
+Model:                            GLM   Df Residuals:                     2287
+Model Family:                 Poisson   Df Model:                           11
+Link Function:                    Log   Scale:                          1.0000
+Method:                          IRLS   Log-Likelihood:                -5397.6
+Date:                Sun, 25 Oct 2026   Deviance:                       39.316
+Time:                        22:45:12   Pearson chi2:                     39.2
+No. Iterations:                     4   Pseudo R-squ. (CS):             0.1925
+Covariance Type:            nonrobust                                         
+=========================================================================================
+                            coef    std err          z      P>|z|      [0.025      0.975]
+-----------------------------------------------------------------------------------------
+const                     1.7032      0.172      9.888      0.000       1.366       2.041
+binge_crude_prev          0.0032      0.003      0.954      0.340      -0.003       0.010
+checkup_crude_prev       -0.0004      0.002     -0.192      0.848      -0.004       0.004
+csmoking_crude_prev       0.0043      0.004      1.100      0.271      -0.003       0.012
+depression_crude_prev     0.0137      0.002      5.800      0.000       0.009       0.018
+obesity_crude_prev        0.0001      0.002      0.076      0.940      -0.003       0.004
+sleep_crude_prev          0.0024      0.002      1.059      0.289      -0.002       0.007
+selfcare_crude_prev      -0.0608      0.022     -2.708      0.007      -0.105      -0.017
+indeplive_crude_prev      0.0522      0.014      3.759      0.000       0.025       0.079
+loneliness_crude_prev     0.0113      0.003      3.717      0.000       0.005       0.017
+foodinsecu_crude_prev    -0.0083      0.007     -1.247      0.212      -0.021       0.005
+housinsecu_crude_prev     0.0150      0.008      1.786      0.074      -0.001       0.032
+=========================================================================================
+
+PREDICTOR VIF
+            predictor       VIF
+     binge_crude_prev  2.528842
+   checkup_crude_prev  1.750444
+  csmoking_crude_prev  6.934794
+depression_crude_prev  2.216376
+   obesity_crude_prev  2.573017
+     sleep_crude_prev  3.209334
+  selfcare_crude_prev 30.514413
+ indeplive_crude_prev 30.953309
+loneliness_crude_prev  3.432565
+foodinsecu_crude_prev 62.830787
+housinsecu_crude_prev 46.839954
+
+SIGNIFICANT PREDICTORS AT P < 0.05
+                           coef       p_value  exp_coef
+depression_crude_prev  0.013653  6.637099e-09  1.013747
+selfcare_crude_prev   -0.060769  6.769180e-03  0.941040
+indeplive_crude_prev   0.052157  1.706267e-04  1.053541
+loneliness_crude_prev  0.011268  2.014381e-04  1.011331
+
+Number of significant predictors: 4
+
+VIF FOR SIGNIFICANT PREDICTORS
+            predictor       VIF
+depression_crude_prev  2.216376
+  selfcare_crude_prev 30.514413
+ indeplive_crude_prev 30.953309
+loneliness_crude_prev  3.432565
+
+McFadden pseudo-R-squared: 0.043562
+Pearson dispersion statistic: 0.017128
+
+Pseudo-R-squared is not the percentage of variance explained.
+Largest absolute significant coefficient: selfcare_crude_prev
+Smallest predictor p-value: depression_crude_prev
+Coefficient magnitude describes effect size on the log scale.
+Statistical significance is assessed using p-values.

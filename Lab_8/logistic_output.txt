@@ -1,0 +1,49 @@
+Dataset: birthwt (1).csv
+Model: logistic
+Predictors: smoke, ht, ui
+Response: low
+Original rows: 189
+Rows used: 189
+Rows removed: 0
+
+                           Logit Regression Results                           
+==============================================================================
+Dep. Variable:                    low   No. Observations:                  189
+Model:                          Logit   Df Residuals:                      185
+Method:                           MLE   Df Model:                            3
+Date:                Sun, 25 Oct 2026   Pseudo R-squ.:                 0.06250
+Time:                        22:41:58   Log-Likelihood:                -110.00
+converged:                       True   LL-Null:                       -117.34
+Covariance Type:            nonrobust   LLR p-value:                  0.002125
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -1.3551      0.241     -5.611      0.000      -1.828      -0.882
+smoke          0.6831      0.329      2.075      0.038       0.038       1.329
+ht             1.4174      0.624      2.273      0.023       0.195       2.640
+ui             1.0384      0.428      2.426      0.015       0.200       1.877
+==============================================================================
+
+CONFUSION MATRIX
+          Predicted 0  Predicted 1
+Actual 0          119           11
+Actual 1           45           14
+
+CLASSIFICATION REPORT
+              precision    recall  f1-score   support
+
+           0     0.7256    0.9154    0.8095       130
+           1     0.5600    0.2373    0.3333        59
+
+    accuracy                         0.7037       189
+   macro avg     0.6428    0.5763    0.5714       189
+weighted avg     0.6739    0.7037    0.6609       189
+
+Accuracy: 70.3704%
+Lowest class precision: 0.5600
+Both categories have at least 30 support: True
+McFadden pseudo-R-squared: 0.062497
+
+Evaluation uses the same rows used to fit the model.
+These are training results, not test-set performance.
+Pseudo-R-squared is not the percentage of variance explained.
