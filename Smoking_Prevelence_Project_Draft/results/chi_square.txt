@@ -1,0 +1,2 @@
+UNWEIGHTED exploratory chi-square: statistic=135.5738; p=2.47299e-31
+Not design-adjusted.

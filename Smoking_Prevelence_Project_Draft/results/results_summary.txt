@@ -1,0 +1,16 @@
+FLORIDA 2022 BRFSS — SMOKING AND HEART DISEASE
+
+Complete-case sample: 11,569 respondents
+Weighted overall heart disease prevalence: 7.83%
+
+Weighted prevalence by smoking category:
+  Never: 5.40% (n=6,291)
+  Former: 12.20% (n=3,817)
+  Current: 10.70% (n=1,461)
+
+Exploratory adjusted smoking odds ratio: 1.892 (approx. 95% CI 1.457–2.456); p=1.706e-06
+
+LIMITATIONS: Cross-sectional, self-reported survey; cannot establish causality.
+Weighted GLM with clustered standard errors is an approximation, not a full stratified BRFSS survey-design estimator.
+The separate chi-square test is unweighted and not design-adjusted.
+Missing BMI/diabetes records are excluded only from the regression model.
